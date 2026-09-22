@@ -1,0 +1,131 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+
+\begin{document}
+
+\section*{Homework 1 Group I}
+Member names to be added.
+
+\section*{Question 1}
+
+Let \(s_i=1-2y_i\). For \(\lambda>0\), the objective is
+\[
+f_\lambda(\theta)
+=
+\underbrace{\sum_{i=1}^{m}
+\phi\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)}_{f(\theta)}
++\frac{\lambda}{2}\|\theta\|^2,
+\qquad \theta\in E.
+\]
+We first show that \(f\) is convex. The smoothed hinge loss satisfies
+\[
+\phi'(z)=
+\begin{cases}
+0, & z\leq -1,\\
+1+z, & -1<z<0,\\
+1, & z\geq 0.
+\end{cases}
+\]
+Indeed, the values and one-sided derivatives of the defining pieces agree
+at \(z=-1\) and \(z=0\). Thus \(\phi\) is continuously differentiable.
+Its derivative is nondecreasing, so for any \(a,b\in\mathbb R\),
+\[
+\phi(b)-\phi(a)-\phi'(a)(b-a)
+=\int_a^b \bigl(\phi'(u)-\phi'(a)\bigr)\,du\geq 0.
+\]
+(The inequality holds for either ordering of \(a\) and \(b\).)
+By Theorem~4.21 of the lecture notes, \(\phi\) is convex.
+
+For any \(\theta,\eta\in E\) and \(t\in[0,1]\), linearity of the inner
+product and convexity of \(\phi\) give
+\begin{align*}
+\phi\!\left(s_i\langle\widetilde{x}_i,(1-t)\theta+t\eta\rangle\right)
+&=\phi\!\left((1-t)s_i\langle\widetilde{x}_i,\theta\rangle
++t s_i\langle\widetilde{x}_i,\eta\rangle\right)\\
+&\leq (1-t)\phi\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
++t\phi\!\left(s_i\langle\widetilde{x}_i,\eta\rangle\right).
+\end{align*}
+Summing over \(i\) yields
+\(f((1-t)\theta+t\eta)\leq(1-t)f(\theta)+tf(\eta)\);
+hence \(f\) is convex.
+
+Now
+\[
+f_\lambda(\theta)-\frac{\lambda}{2}\|\theta\|^2=f(\theta)
+\]
+is convex. Since \(\lambda>0\), Definition~4.5 of the lecture notes
+therefore implies that \(f_\lambda\) is \(\lambda\)-strongly convex.
+It is real-valued on the whole Euclidean space \(E\), so
+Theorem~4.28 applies: \(f_\lambda\) has a unique global minimizer
+\(\theta^\star\).
+
+Finally, \(f_\lambda\) is convex and differentiable on \(E\):
+each loss term is a composition of the continuously differentiable
+function \(\phi\) with a linear map, and the quadratic term is
+differentiable. By Corollary~4.23 of the lecture notes, a point is
+a global minimizer if and only if its gradient vanishes. Consequently,
+\[
+\{\theta\in E:\nabla f_\lambda(\theta)=0\}=\{\theta^\star\}.
+\]
+
+\section*{Question 2}
+
+We now set \(\lambda=0.005\). Write
+\(g_i(\theta)=s_i\langle\widetilde{x}_i,\theta\rangle\).
+Each \(g_i:E\to\mathbb R\) is linear, hence differentiable, and
+\(\phi\) is continuously differentiable as shown in Question 1.
+Thus \(f=\sum_{i=1}^m\phi\circ g_i\) is differentiable.
+By additivity of the differential and the chain rule, for any \(h\in E\),
+\[
+Df(\theta)[h]
+=\sum_{i=1}^m \phi'(g_i(\theta))\,Dg_i(\theta)[h].
+\]
+Using the limit expression for the differential of \(g_i\), we obtain
+\[
+Dg_i(\theta)[h]
+=\lim_{t\to0}\frac{g_i(\theta+th)-g_i(\theta)}{t}
+=\lim_{t\to0}\frac{t s_i\langle\widetilde{x}_i,h\rangle}{t}
+=s_i\langle\widetilde{x}_i,h\rangle.
+\]
+Substituting and using bilinearity of the inner product gives
+\begin{align*}
+Df(\theta)[h]
+&=\sum_{i=1}^m
+s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
+\langle\widetilde{x}_i,h\rangle\\
+&=\left\langle
+\sum_{i=1}^m s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
+\widetilde{x}_i,\ h
+\right\rangle.
+\end{align*}
+
+The quadratic term \(r(\theta)=\frac{\lambda}{2}\|\theta\|^2\)
+is also differentiable. Indeed,
+\[
+r(\theta+h)-r(\theta)-\lambda\langle\theta,h\rangle
+=\frac{\lambda}{2}\|h\|^2=o(\|h\|),
+\]
+so \(Dr(\theta)[h]=\lambda\langle\theta,h\rangle\).
+Consequently, \(f_\lambda=f+r\) is differentiable and
+\[
+Df_\lambda(\theta)[h]
+=\left\langle
+\sum_{i=1}^m s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
+\widetilde{x}_i+\lambda\theta,\ h
+\right\rangle.
+\]
+By Definition~2.18 of the lecture notes,
+\(Df_\lambda(\theta)[h]=\langle\nabla f_\lambda(\theta),h\rangle\).
+Since this equality holds for every \(h\in E\), we conclude that
+\[
+\boxed{
+\nabla f_\lambda(\theta)
+=\sum_{i=1}^m
+s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
+\widetilde{x}_i+\lambda\theta.
+}
+\]
+
+
+\end{document}
