@@ -1,125 +1,92 @@
-import scipy.io
+from pathlib import Path
+from timeit import repeat
+
 import numpy as np
-import matplotlib.pyplot as plt
-import time
-data = scipy.io.loadmat("../data/mnist_train_test.mat", squeeze_me=True, struct_as_record=False)
-'''t(data.keys())
-print(type(data["train"]))
-print(data["train"].shape)
-print(type(data["test"]))
-print(data["test"].shape)
-print(data["train"].dtype.names)
-print(data["test"].dtype.names)
-'''
-train, test=data["train"],data["test"]
-X_train=train.X
-Y_train=train.y
-X_test=test.X
-Y_test=test.y
-#print(X_train.shape)#
-#print(Y_train.shape)#
-l=0.005
-Y_train=Y_train.astype(float)
-Y_test=Y_test.astype(float)
-
-def dot(x,theta):
-    return x@theta
-
-def phi(z):
-    if z<=-1:
-        return 0.0
-    elif z<=0:
-        return (z+1)**2/2
-    else:
-        return 1/2+z
-
-def phi_prime(z):
-    if z<=-1:
-        return 0.0
-    elif z<=0:
-        return (z+1)
-    else:
-        return 1.0
-
-theta=np.zeros(785)
-def f_lambda(theta):
-    f=0.0
-    t=np.ones(Y_train.shape[0])
-    s=dot(X_train.T, theta)
-    p=s*(1-2*Y_train)
-    f=np.sum(np.vectorize(phi)(p))
-    f+=l/2*np.linalg.norm(theta)**2
-    return f
-
-def grad_f(theta):
-    one=np.ones(Y_train.shape[0])
-    s=dot(X_train.T, theta)
-    p=s*(1-2*Y_train)
-    t=np.vectorize(phi_prime)(p)
-    u=(1-2*Y_train)*X_train
-    f=(t*u)@one
-    f+=l*theta
-    return f
-
-t= np.logspace(-8.0, 0.0, num = 101)
-
-np.random.seed(1)
-v=np.random.randn(785)
-v=v/np.linalg.norm(v)
-#print(v.shape)#
-theta=np.random.randn(785)
-
-err=[]
-for i in range(101):
-    value=abs(f_lambda(theta+t[i]*v)-f_lambda(theta)-t[i]*dot(v,grad_f(theta)))
-    err.append(value)
-err=np.array(err)
-#print((np.log(err[70])-np.log(err[69]))/(np.log(t[70])-np.log(t[69])))#
-#plt.loglog(t,err)#
-#plt.show()#
+from scipy.io import loadmat
 
 
+def objective_gradient_loop(theta, X, y, lam):
+    value = 0.0
+    gradient = np.zeros_like(theta)
 
-np.random.seed(40)
+    for i in range(X.shape[1]):
+        x_i = X[:, i]
+        s_i = 1 - 2 * y[i]
+        z = s_i * np.dot(x_i, theta)
 
-def algo(step):
-    l1, l2=[], []
-    theta_0=np.random.randn(785)
-    x=theta_0
-    start=time.perf_counter()   
-    g=grad_f(x)
-    print("initial:", np.linalg.norm(g))
-    print("final:", 10**(-3)*np.linalg.norm(grad_f(theta_0)))
-    while np.linalg.norm(g)>10**(-3)*np.linalg.norm(grad_f(theta_0)):
-        x=x-step*g
-        g=grad_f(x)
-        print(np.linalg.norm(g))
-        if time.perf_counter()-start>=180:
-            break
-        l1.append(f_lambda(x))
-        l2.append(np.linalg.norm(grad_f(x)))
-    plt.plot(l1, label='objective')
-    plt.show()
-    plt.plot(l2, label='gradient norm')
-    plt.show()
-    plt.plot(np.log(l1), label='objective')
-    plt.show()
-    plt.plot(np.log(l2))
-    plt.show()
-    plt.legend()
-    return x
+        if z <= -1:
+            loss = 0.0
+            derivative = 0.0
+        elif z < 0:
+            loss = 0.5 * (1 + z) ** 2
+            derivative = 1 + z
+        else:
+            loss = 0.5 + z
+            derivative = 1.0
 
-print(algo(0.1))
-'''print("firstttt")
-print(algo(1))
-print("secondddd")
-print(algo(0.01))
-print("thirddddd")
-print(algo(10))'''
+        value += loss
+        gradient += s_i * derivative * x_i
 
-"""
-print(X_train.shape)
-print(Y_train.shape)
-print(X_test.shape)
-print(Y_test.shape)
-"""
+    value += 0.5 * lam * np.dot(theta, theta)
+    gradient += lam * theta
+    return value, gradient
+
+
+def objective_gradient_vectorized(theta, X, y, lam):
+    s = 1 - 2 * y
+    z = s * (X.T @ theta)
+
+    derivative = np.clip(1 + z, 0, 1)
+    loss = 0.5 * derivative**2 + np.maximum(z, 0)
+
+    value = np.sum(loss) + 0.5 * lam * np.dot(theta, theta)
+    gradient = X @ (s * derivative) + lam * theta
+    return value, gradient
+
+
+def main():
+    data_path = Path("../data/mnist_train_test.mat")
+    if not data_path.is_file():
+        print("Place mnist_train_test.mat in ../data/ and run from code/.")
+        return
+
+    data = loadmat(data_path, squeeze_me=True, struct_as_record=False)
+    train = data["train"]
+    X = np.asarray(train.X, dtype=float)
+    y = np.asarray(train.y, dtype=float).reshape(-1)
+
+    lam = 0.005
+    rng = np.random.default_rng(329)
+    theta = rng.standard_normal(X.shape[0])
+
+    value_loop, gradient_loop = objective_gradient_loop(theta, X, y, lam)
+    value_vector, gradient_vector = objective_gradient_vectorized(theta, X, y, lam)
+
+    rtol, atol = 1e-10, 1e-10
+    np.testing.assert_allclose(value_loop, value_vector, rtol=rtol, atol=atol)
+    np.testing.assert_allclose(gradient_loop, gradient_vector, rtol=rtol, atol=atol)
+
+    print(f"Agreement checks passed (rtol={rtol:g}, atol={atol:g}).")
+    print(f"Objective absolute difference: {abs(value_loop - value_vector):.3e}")
+    print(
+        "Gradient maximum absolute difference: "
+        f"{np.max(np.abs(gradient_loop - gradient_vector)):.3e}"
+    )
+
+    loop_time = min(repeat(
+        lambda: objective_gradient_loop(theta, X, y, lam),
+        number=1, repeat=3,
+    ))
+    vector_time = min(repeat(
+        lambda: objective_gradient_vectorized(theta, X, y, lam),
+        number=1, repeat=3,
+    ))
+
+    print("Objective and gradient together, best of 3 runs:")
+    print(f"Loop:       {loop_time:.6f} seconds")
+    print(f"Vectorized: {vector_time:.6f} seconds")
+    print(f"Speedup:    {loop_time / vector_time:.2f}x")
+
+
+if __name__ == "__main__":
+    main()
