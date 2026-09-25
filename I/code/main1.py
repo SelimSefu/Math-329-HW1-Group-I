@@ -2,6 +2,7 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from scipy.sparse.linalg import svds
 data = scipy.io.loadmat("../data/mnist_train_test.mat", squeeze_me=True, struct_as_record=False)
 '''t(data.keys())
 print(type(data["train"]))
@@ -82,6 +83,14 @@ err=np.array(err)
 
 np.random.seed(40)
 
+sigma_max = svds(
+    X_train,
+    k=1,
+    return_singular_vectors=False
+)[0]
+
+L = sigma_max**2 + l
+
 def algo(step):
     l1, l2=[], []
     theta_0=np.random.randn(785)
@@ -98,18 +107,33 @@ def algo(step):
             break
         l1.append(f_lambda(x))
         l2.append(np.linalg.norm(grad_f(x)))
-    plt.plot(l1, label='objective')
+    '''plt.plot(l1, label='objective')
     plt.show()
     plt.plot(l2, label='gradient norm')
     plt.show()
-    plt.plot(np.log(l1), label='objective')
+    plt.semilogy(l1)
     plt.show()
-    plt.plot(np.log(l2))
+    plt.semilogy(l2)
     plt.show()
-    plt.legend()
+    plt.legend()'''
+    np.savetxt("../results/q5_f_conv.txt", l1)
+    np.savetxt("../results/q5_gradient_conv.txt", l2)
     return x
+theta_final=algo(1/L)
+print("L is this", L)
+#print(algo(1/L))#
+np.savetxt("../results/q7.txt", theta_final)
+prod1=X_train.T@theta_final
+train=(prod1>0).astype(int)
+score_train=np.mean(train == Y_train)
 
-print(algo(0.1))
+prod2=X_test.T@theta_final
+test=(prod2>0).astype(int)
+score_test=np.mean(test == Y_test)
+
+print("Prediction for training is", score_train)
+print("Prediction for test is", score_test)
+
 '''print("firstttt")
 print(algo(1))
 print("secondddd")
