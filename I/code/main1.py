@@ -4,14 +4,6 @@ import matplotlib.pyplot as plt
 import time
 from scipy.sparse.linalg import svds
 data = scipy.io.loadmat("../data/mnist_train_test.mat", squeeze_me=True, struct_as_record=False)
-'''t(data.keys())
-print(type(data["train"]))
-print(data["train"].shape)
-print(type(data["test"]))
-print(data["test"].shape)
-print(data["train"].dtype.names)
-print(data["test"].dtype.names)
-'''
 train, test=data["train"],data["test"]
 X_train=train.X
 Y_train=train.y
@@ -41,10 +33,35 @@ def phi_prime(z):
         return (z+1)
     else:
         return 1.0
+    
+theta=np.random.rand(785)
+'''
+Iterative part is missing! 
+def iterative_f_lambda(theta):
+    f=0.0
+    lis=[]
+    start=time.perf_counter()
+    t=np.ones(Y_train.shape[0])
+    for i in range(X_train.shape[0]):
+        s=0
+        for j in range(X_train.shape[1]):
+            s+=X_train[i,j]*theta[j]
+        lis.append(s)
+    p=[]
+    for i in range(Y_train.shape[0]):
+        p.append(lis[i]*(1-2*Y_train[i]))
+    for i in range(len(p)):
+        f+=phi(p[i])
+    
+    f+=l/2*np.linalg.norm(theta)**2
+    print("time for iterative f is", time.perf_counter()-start)
+    return f
 
-theta=np.zeros(785)
+'''
+
 def f_lambda(theta):
     f=0.0
+    start=time.perf_counter()
     t=np.ones(Y_train.shape[0])
     s=dot(X_train.T, theta)
     p=s*(1-2*Y_train)
@@ -52,6 +69,10 @@ def f_lambda(theta):
     f+=l/2*np.linalg.norm(theta)**2
     return f
 
+'''print(f_lambda(theta))'''
+'''print(iterative_f_lambda(theta))'''
+
+print()
 def grad_f(theta):
     one=np.ones(Y_train.shape[0])
     s=dot(X_train.T, theta)
@@ -76,8 +97,8 @@ for i in range(101):
     err.append(value)
 err=np.array(err)
 #print((np.log(err[70])-np.log(err[69]))/(np.log(t[70])-np.log(t[69])))#
-#plt.loglog(t,err)#
-#plt.show()#
+plt.loglog(t,err)
+plt.show()
 
 
 
@@ -107,7 +128,7 @@ def algo(step):
             break
         l1.append(f_lambda(x))
         l2.append(np.linalg.norm(grad_f(x)))
-    '''plt.plot(l1, label='objective')
+    plt.plot(l1, label='objective')
     plt.show()
     plt.plot(l2, label='gradient norm')
     plt.show()
@@ -115,13 +136,12 @@ def algo(step):
     plt.show()
     plt.semilogy(l2)
     plt.show()
-    plt.legend()'''
+    plt.legend()
     np.savetxt("../results/q5_f_conv.txt", l1)
     np.savetxt("../results/q5_gradient_conv.txt", l2)
     return x
 theta_final=algo(1/L)
 print("L is this", L)
-#print(algo(1/L))#
 np.savetxt("../results/q7.txt", theta_final)
 prod1=X_train.T@theta_final
 train=(prod1>0).astype(int)
@@ -133,14 +153,14 @@ score_test=np.mean(test == Y_test)
 
 print("Prediction for training is", score_train)
 print("Prediction for test is", score_test)
-
-'''print("firstttt")
+'''
+print("firstttt")
 print(algo(1))
 print("secondddd")
 print(algo(0.01))
 print("thirddddd")
-print(algo(10))'''
-
+print(algo(10))
+'''
 """
 print(X_train.shape)
 print(Y_train.shape)
