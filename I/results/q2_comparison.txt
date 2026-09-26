@@ -1,0 +1,10 @@
+Question 2: objective and gradient comparison
+Samples: 12665, parameters: 785, lambda: 0.005, seed: 329
+Agreement checks passed (rtol=1e-10, atol=1e-10).
+Objective (loop): 2.801759923542659453e+04
+Objective (vectorized): 2.801759923542664183e+04
+Objective absolute difference: 4.729e-11
+Gradient maximum absolute difference: 1.023e-10
+Timings: best of 3 single evaluations on identical inputs, using timeit.repeat.
+f_lambda: loop=0.027386s, vectorized=0.001243s, speedup=22.03x (best of 3)
+grad_f: loop=0.047903s, vectorized=0.003563s, speedup=13.45x (best of 3)

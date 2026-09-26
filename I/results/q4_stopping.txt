@@ -1,0 +1,10 @@
+stop_reason: gradient tolerance
+iterations: 26768
+elapsed_seconds: 137.181180
+time_limit_seconds: 180
+step: 1.258992288980229210e-06
+lambda: 0.005
+seed: 40
+initial_gradient_norm: 5.893101848341391451e+04
+target_gradient_norm: 5.893101848341391502e+01
+final_gradient_norm: 5.893066979744360623e+01
