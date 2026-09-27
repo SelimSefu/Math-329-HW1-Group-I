@@ -11,18 +11,18 @@ the following from the repository root:
 python -c "import sys, runpy; sys.path.append('.python-deps'); runpy.run_path('I/code/main.py', run_name='__main__')"
 ```
 
-Question 2 prints and saves to `results/q2_comparison.txt` the loop/vectorized
+**Question 2** prints and saves to `results/q2_comparison.txt` the loop/vectorized
 agreement checks with relative and absolute
 tolerances of `1e-10`, plus separate objective and gradient timings on identical
 inputs (best of three single evaluations).
 
-Question 3 saves `results/q3_gradient_check.pdf` and
+**Question 3** saves `results/q3_gradient_check.pdf` and
 `results/q3_gradient_check.txt` relative to this directory. The text file contains
 two columns: step size `t` and absolute first-order Taylor remainder. The script
 uses seed 1 for the point and unit direction. Compare the straight portion of
 the plotted curve with the slope-2 reference; very small steps may show roundoff.
 
-Question 4 runs fixed-step gradient descent with step `1/L`, where
+**Question 4** runs fixed-step gradient descent with step `1/L`, where
 `L = sigma_max(X)**2 + lambda`, and a random initial point generated with seed 40.
 It stops at a gradient norm at most `1e-3` times the initial norm or after 180
 seconds. The time budget covers initialization and iterations, excluding the
@@ -39,9 +39,14 @@ recorded as a numerical failure, not convergence.
 Each run replaces these output files. The fixed initial point is reproducible;
 the number of iterations reached under the time limit depends on the machine.
 
-Question 5 reads `results/q4_history.txt` and saves two separate panels in
+**Question 5** reads `results/q4_history.txt` and saves two separate panels in
 `results/q5_convergence.pdf`: objective value and gradient norm versus iteration,
 including iteration 0. Both vertical axes are logarithmic because the quantities
 decrease over several orders of magnitude; this also makes the later behavior
 visible. The objective plot shows the value itself, not the optimality gap.
 The gradient plot includes the stopping tolerance as a dashed line.
+
+
+**Question 7** evaluates predictions on train and test data using optimal model parameters learned in Question 5. Finally, it computes the train/test classification error
+rates and records them in `results/q7_classif_error_rates.txt`.
+The classification error is approximately $0.134\%$ on the training set and $0.189\%$ on the test set. The test error is slightly higher than the training error, as expected, but remains very small, indicating that the classifier generalizes well to unseen samples.
