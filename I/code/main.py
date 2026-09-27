@@ -45,7 +45,6 @@ def f_lambda(theta, X, y, lam):
     d = np.clip(1 + z,0,1)
     return np.sum(0.5 * d**2 + np.maximum(z, 0)) + (lam / 2) * (theta @ theta)      
 
-# Matrix-vector form of the sum of individual gradient contributions.
 def grad_f(theta, X, y, lam):
     s = 1 - 2 * y
     z = s * (X.T @ theta)
@@ -192,9 +191,7 @@ def main():
     t = np.logspace(-8.0, 0.0, num=101)
     f0 = f_lambda(theta, X, y, lam)
     dir_deriv = v @ grad_f(theta, X, y, lam)
-    # Difference between the actual value and its first-order approximation.
     err = np.array([abs(f_lambda(theta + h * v, X, y, lam) - f0 - h * dir_deriv) for h in t])
-    # Save the step sizes and corresponding remainders as two columns.
     np.savetxt(results / "q3_gradient_check.txt", np.column_stack((t, err)), header="t absolute_taylor_remainder")
 
     fig, ax = plt.subplots()
