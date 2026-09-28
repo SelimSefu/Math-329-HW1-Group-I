@@ -120,17 +120,14 @@ s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
 \widetilde{x}_i+\lambda\theta.
 }
 \]
-\paragraph{Numerical agreement.}
-We evaluated the loop and vectorized implementations on the same training
-data and parameter vector (random seed 329), with \(\lambda=0.005\).
-Using NumPy's \texttt{assert\_allclose}, we compared the objective values
-and each gradient component with absolute and relative tolerances of
-\(10^{-10}\): a pair \(a,b\), with \(b\) the vectorized result, passes when
-\(\lvert a-b\rvert\leq 10^{-10}+10^{-10}\lvert b\rvert\).
-Both checks passed. The absolute objective difference was
-\(5.093\times10^{-11}\), and the largest absolute gradient-component
-difference was \(1.569\times10^{-10}\), consistent with floating-point
-roundoff from different evaluation orders.
+\paragraph{Numerical agreement and runtime.}
+We checked the objective values and each gradient component using
+\texttt{np.testing.\allowbreak assert\_allclose}, with absolute and relative
+tolerances of \(10^{-10}\). Both implementations agreed within these
+tolerances. We timed them on identical inputs using \texttt{timeit.repeat},
+retaining the minimum of three single evaluations for each implementation.
+In this run, vectorization was approximately 18 times faster for the
+objective and 14 times faster for the gradient.
 
 \section*{Question 4}
 
