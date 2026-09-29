@@ -129,6 +129,67 @@ for each implementation in each trial. Across these trials, the lowest
 observed speedups from vectorization were approximately \(15.90\times\) for
 the objective and \(10.30\times\) for the gradient.
 
+\section*{Question 3}
+
+To check our implementation of the gradient, we use a first-order Taylor
+expansion of \(f_\lambda\). We choose a random point
+\(\theta\in\mathbb{R}^{785}\) and a random unit vector
+\(v\in\mathbb{R}^{785}\), and consider
+\[
+E(t)
+=
+\left|
+f_\lambda(\theta+tv)
+-f_\lambda(\theta)
+-t\langle \nabla f_\lambda(\theta),v\rangle
+\right|.
+\]
+
+If the implemented gradient is correct, then the first-order Taylor
+expansion predicts
+\[
+f_\lambda(\theta+tv)
+=
+f_\lambda(\theta)
++t\langle\nabla f_\lambda(\theta),v\rangle
++O(t^2),
+\]
+and therefore
+\[
+E(t)=O(t^2).
+\]
+
+We evaluate \(E(t)\) for
+\[
+t\in\operatorname{logspace}(-8,0,101)
+\]
+and plot the result on logarithmic axes.
+
+\begin{center}
+\includegraphics[width=0.75\linewidth]{results/q3_gradient_check.pdf}
+\end{center}
+
+On the approximately straight part of the log--log plot, the observed
+slope is close to \(2\). Indeed, if
+\[
+E(t)\approx Ct^2,
+\]
+then
+\[
+\log E(t)\approx \log C+2\log t,
+\]
+so the expected slope is \(2\).
+
+For very small values of \(t\), the error no longer follows the quadratic
+behavior and becomes irregular. This is due to floating-point roundoff
+and cancellation when subtracting nearly equal quantities.
+
+Thus, the observed slope is consistent with the expected second-order
+Taylor remainder which supports the numerical correctness.
+However, this does not constitute a proof of
+correctness, since the test is performed only at a particular point and
+direction and uses finite-precision arithmetic.
+
 \section*{Question 4}
 
 Given that $\nabla f_\lambda$ is $L$-Lipschitz continuous with constant $L = \sigma_{\max}(X)^2 + \lambda$ (where $\sigma_{\max}(X)$ is computed numerically),
