@@ -156,7 +156,8 @@ f_\lambda(\theta+tv)
 \right|.
 \]
 
-\noindent If the implemented gradient is correct, then the first-order Taylor
+\noindent If the implemented gradient is correct, then, since
+\(\nabla f_\lambda\) is \(L\)-Lipschitz continuous, the first-order Taylor
 expansion predicts
 \[
 f_\lambda(\theta+tv)
@@ -213,8 +214,8 @@ Moreover, since $f_\lambda$ is $\lambda$-strongly convex, we know by Theorem 4.3
 The four graphs compare the objective value and gradient norm against iteration number using linear (left) and logarithmic (right) vertical axes.
 We prefer logarithmic vertical axes because both quantities decrease over several orders of magnitude, and the linear scale hides much of the later progress.
 A geometric bound \(e_k\leq Cq^k\), with \(0<q<1\), becomes a linear upper bound on \(\log e_k\). Roughly straight descending portions of a semilog
-curve can therefore suggest linear convergence, but do not establish such a bound. The objective panel shows \(f_\lambda(\theta_k)\), not the gap
-\(f_\lambda(\theta_k)-f_\lambda(\theta^\star)\); its flattening is not evidence against linear convergence. The theoretical guarantee is discussed in Question 6.
+curve can therefore suggest linear convergence, but do not prove such a bound. The objective graph shows \(f_\lambda(\theta_k)\), not the gap
+\(f_\lambda(\theta_k)-f_\lambda(\theta^\star)\), so its flattening is not evidence against linear convergence. The theoretical guarantee is discussed in Question 6.
 
 \section*{Question 6}
 
@@ -358,7 +359,7 @@ with explicit Python loops, we use vectorized these operations using methods bui
 These operations are executed by optimized numerical linear algebra
 routines and are therefore much faster.
 
-In our experiments, across $30$ trials, the average speedup was approximately $18.91$ times for the objective and $12.62$ for the gradient. Since gradient
+In our experiments, across $30$ trials, the average speedup was approximately $18.46$ times for the objective and $12.87$ for the gradient. Since gradient
 descent requires many iterations, this speed-up has a substantial impact on the total runtime.
 
 \end{document}
