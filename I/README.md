@@ -1,4 +1,23 @@
-# Questions 2, 3, 4 and 5
+# Homework 1 - Group I
+
+## Repository Structure
+
+```text
+I/
+├── I.pdf             # Homework 1 report
+├── DISCLAIMER.md     # Disclosure of tool use and external discussions
+├── README.md         # Requirements and information about homework 
+│                       related questions
+├── code/
+│   ├── main.py       # Main executable script
+│   └── helper.py     # Implemented methods and auxiliary functions
+│
+├── results/          # Generated output files and other homework requests
+│
+└── data/             # Input data (left empty in the submitted ZIP)
+```
+
+### Program Execution
 
 Run `python I/code/main.py` from the repository root (or use the script's
 absolute path from any working directory). Requires NumPy, SciPy and Matplotlib,
@@ -10,6 +29,20 @@ the following from the repository root:
 ```powershell
 python -c "import sys, runpy; sys.path.append('.python-deps'); runpy.run_path('I/code/main.py', run_name='__main__')"
 ```
+
+### Requirements
+
+The code requires the following external packages:
+- `numpy`
+- `scipy`
+- `matplotlib`
+
+- - -
+
+- - -
+
+# Homework Questions 2, 3, 4 and 5
+
 
 **Question 2** prints and saves to `results/q2_comparison.txt` the loop/vectorized
 agreement checks with relative and absolute
