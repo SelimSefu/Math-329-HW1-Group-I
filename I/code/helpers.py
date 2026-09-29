@@ -137,21 +137,22 @@ def plot_convergence(results):
     history = np.loadtxt(results / "q4_history.txt", ndmin=2)
     k, l1, l2 = history.T
 
-    # We chose logarithmic vertical axes to show the decrease over several orders of
-    # magnitude while keeping the behavior at later iterations visible.
-    fig, axes = plt.subplots(2, 1, figsize=(8, 7), sharex=True)
-    axes[0].semilogy(k, l1, label="objective")
-    axes[0].set_ylabel(r"$f_\lambda(\theta_k)$")
-    axes[0].set_title("Objective value")
-    axes[1].semilogy(k, l2, label="gradient norm")
-    axes[1].axhline(1e-3 * l2[0], color="tab:red", linestyle="--",
-                    label="stopping tolerance")
-    axes[1].set_ylabel(r"$\|\nabla f_\lambda(\theta_k)\|$")
-    axes[1].set_xlabel("Iteration k")
-    axes[1].set_title("Gradient norm")
-    for ax in axes:
-        ax.grid(True, which="both", alpha=0.3)
-        ax.legend()
+    # Compare linear and logarithmic y-axes using the same recorded iterates.
+    fig, axes = plt.subplots(2, 2, figsize=(10, 6), sharex=True)
+    for col, scale in enumerate(("linear", "log")):
+        axes[0, col].plot(k, l1, label="objective")
+        axes[1, col].plot(k, l2, label="gradient norm")
+        axes[1, col].axhline(1e-3 * l2[0], color="tab:red", linestyle="--",
+                            label="stopping tolerance")
+        axes[0, col].set_title(f"Objective ({scale} y-axis)")
+        axes[1, col].set_title(f"Gradient norm ({scale} y-axis)")
+        axes[0, col].set_ylabel(r"$f_\lambda(\theta_k)$")
+        axes[1, col].set_ylabel(r"$\|\nabla f_\lambda(\theta_k)\|$")
+        for ax in axes[:, col]:
+            ax.set_yscale(scale)
+            ax.set_xlabel("Iteration k")
+            ax.grid(True, which="both", alpha=0.3)
+            ax.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(results / "q5_convergence.pdf")
     plt.close(fig)

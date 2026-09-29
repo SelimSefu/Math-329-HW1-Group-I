@@ -39,11 +39,12 @@ recorded as a numerical failure, not convergence.
 Each run replaces these output files. The fixed initial point is reproducible;
 the number of iterations reached under the time limit depends on the machine.
 
-**Question 5** reads `results/q4_history.txt` and saves two separate panels in
+**Question 5** reads `results/q4_history.txt` and saves four panels in
 `results/q5_convergence.pdf`: objective value and gradient norm versus iteration,
-including iteration 0. Both vertical axes are logarithmic because the quantities
-decrease over several orders of magnitude; this also makes the later behavior
-visible. The objective plot shows the value itself, not the optimality gap.
+including iteration 0. The left column uses linear vertical axes and the right
+column uses logarithmic vertical axes. The logarithmic scale shows decreases
+over several orders of magnitude and makes the later behavior visible.
+The objective plots show the value itself, not the optimality gap.
 The gradient plot includes the stopping tolerance as a dashed line.
 
 
