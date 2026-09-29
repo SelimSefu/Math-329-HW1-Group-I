@@ -120,10 +120,14 @@ s_i\phi'\!\left(s_i\langle\widetilde{x}_i,\theta\rangle\right)
 }
 \]
 \paragraph{Numerical agreement and runtime.}
-We checked the objective values and each gradient component using\texttt{np.testing.\allowbreak assert\_allclose}, with absolute and relative
-tolerances of \(10^{-10}\). Both implementations agreed within thesetolerances. We timed them on identical inputs using \texttt{timeit.repeat},
-retaining the minimum of three single evaluations for each implementation. In this run, vectorization was approximately 18 times faster for the
-objective and 14 times faster for the gradient.
+We checked the objective values and each gradient component using
+\texttt{np.testing.\allowbreak assert\_allclose}, with absolute and relative
+tolerances of \(10^{-10}\). Both implementations agreed within these
+tolerances. We performed 30 timing trials on identical inputs using
+\texttt{timeit.repeat}, retaining the minimum of three single evaluations
+for each implementation in each trial. Across these trials, the lowest
+observed speedups from vectorization were approximately \(15.90\times\) for
+the objective and \(10.30\times\) for the gradient.
 
 \section*{Question 4}
 
@@ -327,7 +331,7 @@ X^\top(X\theta-y).
 These operations are executed by optimized numerical linear algebra
 routines and are therefore much faster.
 
-In our experiments, across $30$ trials, the median speedup was approximately $20$ times for the objective and $14$ for the gradient. Since gradient
+In our experiments, across $30$ trials, the median speedup was approximately $18.91$ times for the objective and $12.62$ for the gradient. Since gradient
 descent requires many iterations, this speed-up has a substantial impact on the total runtime.
 
 \end{document}

@@ -41,13 +41,19 @@ The code requires the following external packages:
 
 - - -
 
-# Homework Questions 2, 3, 4 and 5
+# Homework Questions 2, 3, 4, 5 and 7
 
 
 **Question 2** prints and saves to `results/q2_comparison.txt` the loop/vectorized
 agreement checks with relative and absolute
 tolerances of `1e-10`, plus separate objective and gradient timings on identical
-inputs (best of three single evaluations).
+inputs over 30 trials (best of three single evaluations per implementation per
+trial). The text report includes the minimum and median observed speedups.
+`results/q2_repeated_timings.csv` contains all 30 trials: trial number, objective
+loop time, objective vectorized time, objective speedup, gradient loop time,
+gradient vectorized time, and gradient speedup. Times are in seconds; speedup
+is loop time divided by vectorized time. Each run regenerates both Q2 files;
+timings vary with hardware and system load even though the inputs are fixed.
 
 **Question 3** saves `results/q3_gradient_check.pdf` and
 `results/q3_gradient_check.txt` relative to this directory. The text file contains

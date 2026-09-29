@@ -64,22 +64,36 @@ def main():
             f"Objective (vectorized): {f:.18e}",
             f"Objective absolute difference: {abs(f_loop - f):.3e}",
             f"Gradient maximum absolute difference: {np.max(np.abs(grad_loop - grad)):.3e}",
-            "Timings: best of 3 single evaluations on identical inputs, using timeit.repeat.",
+            "Timings: 30 trials; best of 3 single evaluations per implementation per trial, using timeit.repeat on identical inputs.",
         ]
     
     # Each timing is one evaluation, taking the best of three repetitions.
     # Objective and gradient timings use identical theta, X_train, y_train and lam.
-    for name, loop, vectorized in (
-            ("f_lambda", f_lambda_loop, f_lambda), 
-            ("grad_f", grad_f_loop, grad_f), 
+    timings = []
+    for trial in range(1, 31):
+        row = [trial]
+        for loop, vectorized in (
+            (f_lambda_loop, f_lambda),
+            (grad_f_loop, grad_f),
         ):
+            loop_time = min(repeat(lambda: loop(theta, X_train, y_train, lam), number=1, repeat=3))
+            vector_time = min(repeat(lambda: vectorized(theta, X_train, y_train, lam), number=1, repeat=3))
+            row.extend([loop_time, vector_time, loop_time / vector_time])
+        timings.append(row)
 
-        loop_time   = min(repeat(lambda: loop(theta, X_train, y_train, lam), number=1, repeat=3))
-        vector_time = min(repeat(lambda: vectorized(theta, X_train, y_train, lam), number=1, repeat=3))
-        
+    timings = np.asarray(timings)
+    np.savetxt(
+        results / "q2_repeated_timings.csv", timings, delimiter=",",
+        header=("trial,objective_loop_seconds,objective_vector_seconds,"
+                "objective_speedup,gradient_loop_seconds,"
+                "gradient_vector_seconds,gradient_speedup"),
+        comments="",
+    )
+    for name, column in (("f_lambda", 3), ("grad_f", 6)):
+        speedups = timings[:, column]
         q2_output.append(
-            f"{name}: loop={loop_time:.6f}s, vectorized={vector_time:.6f}s, "
-            f"speedup={loop_time / vector_time:.2f}x (best of 3)"
+            f"{name}: minimum speedup={speedups.min():.2f}x, "
+            f"median speedup={np.median(speedups):.2f}x across 30 trials"
         )
 
     # Keep the agreement checks and runtime measurements with the other results.
