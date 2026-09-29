@@ -354,8 +354,7 @@ where \(L\) is the Lipschitz constant of \(\nabla f_\lambda\), gradient descent 
 
 Vectorizing the computations significantly improves the efficiency of
 the implementation. Instead of evaluating the objective and gradient
-with explicit Python loops, we use matrix operations such as
-\(X^\top(X\theta-y).\)
+with explicit Python loops, we use vectorized these operations using methods built in the \texttt{numpy} library (for instance matrix-vector operations).
 These operations are executed by optimized numerical linear algebra
 routines and are therefore much faster.
 
