@@ -65,9 +65,8 @@ Summing over \(i\) yields
 \(f((1-t)\theta+t\eta)\leq(1-t)f(\theta)+tf(\eta)\);
 hence \(f\) is convex.
 
-Now
-\(f_\lambda(\theta)-\frac{\lambda}{2}\|\theta\|^2=f(\theta)\)
-is convex. Since \(\lambda>0\), Definition~4.5 of the lecture notes therefore implies that \(f_\lambda\) is \(\lambda\)-strongly convex.
+Now $f_\lambda(\theta)-\frac{\lambda}{2}\|\theta\|^2=f(\theta)$
+is convex. Since $\lambda>0$, Definition~4.5 of the lecture notes therefore implies that \(f_\lambda\) is \(\lambda\)-strongly convex.
 It is real valued on the whole Euclidean space \(E\), so Theorem~4.28 applies: \(f_\lambda\) has a unique global minimizer \(\theta^\star\).
 
 Moreover, \(f_\lambda\) is convex and differentiable on \(E\).
@@ -157,7 +156,7 @@ f_\lambda(\theta+tv)
 \right|.
 \]
 
-If the implemented gradient is correct, then the first-order Taylor
+\noindent If the implemented gradient is correct, then the first-order Taylor
 expansion predicts
 \[
 f_\lambda(\theta+tv)
@@ -219,38 +218,41 @@ curve can therefore suggest linear convergence, but do not establish such a boun
 
 \section*{Question 6}
 
-Consider the fixed-step gradient descent iteration
-\[
-\theta_{k+1}
+Consider the fixed-step gradient descent iteration 
+
+\vspace*{-10pt}
+$$\theta_{k+1}
 =
 \theta_k-\alpha\nabla f_\lambda(\theta_k),
-\qquad k\geq 0.
-\]
+\qquad k\geq 0$$.
+\vspace*{-10pt}
 
 From Question 1, \(f_\lambda\) is \(\lambda\)-strongly convex since
 \(f_\lambda(\theta)-\frac{\lambda}{2}\|\theta\|^2=f(\theta)\)
 is convex. Moreover, as stated in the homework,
 \(\nabla f_\lambda\)
 is Lipschitz continuous with constant
-\(L=\sigma_{\max}(X)^2+\lambda.\)
+$L=\sigma_{\max}(X)^2+\lambda$.
 Hence the assumptions of Theorem~4.31 are satisfied with
-\(\mu=\lambda, \qquad L=\sigma_{\max}(X)^2+\lambda.\)
-
-Therefore \(f_\lambda\) has a unique minimizer \(\theta^\star\), and
+$\mu=\lambda, \, L=\sigma_{\max}(X)^2+\lambda$.
+%
+Therefore $f_\lambda$ has a unique minimizer $\theta^\star$, and
 for the step size
-\(\boxed{ \alpha=\frac{1}{L} = \frac{1}{\sigma_{\max}(X)^2+\lambda}, }\)
+\(\alpha=\frac{1}{L} = \frac{1}{\sigma_{\max}(X)^2+\lambda}\),
 Theorem~4.31 gives
-\[
-f_\lambda(\theta_k)-f_\lambda(\theta^\star)
+
+\vspace*{-5pt}
+$$f_\lambda(\theta_k)-f_\lambda(\theta^\star)
 \leq
 \left(1-\frac{\lambda}{L}\right)^k
 \left(
 f_\lambda(\theta_0)-f_\lambda(\theta^\star)
-\right).
-\]
-Thus the objective values converge globally and at least linearly to
-the optimum.
+\right)$$.
+\vspace*{-7pt}
 
+\noindent Thus the objective values converge globally and at least linearly to
+the optimum.
+%
 More generally, for every
 \(0<\alpha\leq\frac{1}{L},\)
 the same theorem may be applied with Lipschitz constant \(1/\alpha\),
@@ -264,26 +266,25 @@ f_\lambda(\theta_0)-f_\lambda(\theta^\star)
 \right).
 \]
 
-For the value \(\lambda=0.005\), the admissible step sizes are therefore
-\(\boxed{ 0<\alpha\leq \frac{1}{\sigma_{\max}(X)^2+0.005}. }\)
+\noindent For the value \(\lambda=0.005\), the admissible step sizes are therefore
+\( 0<\alpha\leq \frac{1}{\sigma_{\max}(X)^2+0.005}.\)
 
 \subsection*{Application to our implementation}
 
 Our implementation uses exactly
-\(\alpha=\frac{1}{L}, \qquad L=\sigma_{\max}(X)^2+\lambda,\)
+$\alpha=\frac{1}{L}$, $ L=\sigma_{\max}(X)^2+\lambda$,
 so Theorem~4.31 applies directly.
-
-Writing
-\(\kappa=\frac{L}{\lambda},\)
+Writing $\kappa=\frac{L}{\lambda}$,
 we obtain
-\[
+\vspace*{-6pt}
+$$
 f_\lambda(\theta_k)-f_\lambda(\theta^\star)
 \leq
 \left(1-\frac{1}{\kappa}\right)^k
 \left(
 f_\lambda(\theta_0)-f_\lambda(\theta^\star)
 \right).
-\]
+$$
 
 Corollary~4.32 further gives
 \[
@@ -324,8 +325,8 @@ then more slowly, until the stopping tolerance is reached after
 approximately \(2.7\times10^4\) iterations.
 
 Corollary~4.32 only provides the geometric upper bound
-\(\|\nabla f_\lambda(\theta_k)\| \leq Cq^k,\)
-\(q=\sqrt{1-\frac{\lambda}{L}}<1,\)
+$\|\nabla f_\lambda(\theta_k)\| \leq Cq^k$,
+$q=\sqrt{1-\frac{\lambda}{L}}<1$,
 rather than requiring the gradient norm to decrease by the same factor
 at every iteration. Thus the changes of slope and relatively flat
 regions in the plot are compatible with the theory.
@@ -333,12 +334,15 @@ regions in the plot are compatible with the theory.
 Since the numerical run stops once the prescribed tolerance is reached,
 it does not show convergence all the way to zero, but its behavior is
 consistent with the asymptotic prediction
-\(\|\nabla f_\lambda(\theta_k)\|\to 0.\)
+$\|\nabla f_\lambda(\theta_k)\|\to 0$.
 
 \section*{Question 7}
 
-The classification error is approximately \(0.134\%\) on the training set and \(0.189\%\) on the test set. The test error is slightly higher than the training error, as expected, but remains very small, indicating that the classifier generalizes well to unseen samples.
-\subsection*{Q8. Mathematical insight}
+Running the program on our machines yield a classification error of approximately \(0.134\%\) on the training set and \(0.189\%\) on the test set. The test error is slightly higher than the training error, as expected, but remains very small, indicating that the classifier generalizes well to unseen samples.
+
+\section*{Question 8}
+
+\subsection*{Mathematical Insight}
 
 The regularization term
 \(\frac{\lambda}{2}\|w\|^2\)
@@ -346,7 +350,7 @@ makes \(f_\lambda\) \(\lambda\)-strongly convex. Therefore, \(f_\lambda\) has a 
 \(\alpha=\frac{1}{L},\)
 where \(L\) is the Lipschitz constant of \(\nabla f_\lambda\), gradient descent converges at least linearly.
 
-\subsection*{Computational insight}
+\subsection*{Computational Insight}
 
 Vectorizing the computations significantly improves the efficiency of
 the implementation. Instead of evaluating the objective and gradient
