@@ -224,7 +224,7 @@ Consider the fixed-step gradient descent iteration
 $$\theta_{k+1}
 =
 \theta_k-\alpha\nabla f_\lambda(\theta_k),
-\qquad k\geq 0$$.
+\qquad k\geq 0$$
 \vspace*{-10pt}
 
 From Question 1, \(f_\lambda\) is \(\lambda\)-strongly convex since
@@ -358,7 +358,7 @@ with explicit Python loops, we use vectorized these operations using methods bui
 These operations are executed by optimized numerical linear algebra
 routines and are therefore much faster.
 
-In our experiments, across $30$ trials, the median speedup was approximately $18.91$ times for the objective and $12.62$ for the gradient. Since gradient
+In our experiments, across $30$ trials, the average speedup was approximately $18.91$ times for the objective and $12.62$ for the gradient. Since gradient
 descent requires many iterations, this speed-up has a substantial impact on the total runtime.
 
 \end{document}
