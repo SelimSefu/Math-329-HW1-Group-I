@@ -129,13 +129,15 @@ objective and 14 times faster for the gradient.
 
 
 Given that $\nabla f_\lambda$ is $L$-Lipschitz continuous with constant $L = \sigma_{\max}(X)^2 + \lambda$ (where $\sigma_{\max}(X)$ is computed numerically),
-we select the constant step-size $\alpha= \frac{1}{L} = \frac{1}{\sigma_{\max}(X)^2 + \lambda}$ as a consequence of Theorems 3.3 and 3.4. .
-Given that $\nabla f_\lambda$ is $L$-Lipschitz continuous with constant $L = \sigma_{\max}(X)^2 + \lambda$ (where $\sigma_{\max}(X)$ is computed numerically),
-we select the constant step-size $\alpha= \frac{1}{L} = \frac{1}{\sigma_{\max}(X)^2 + \lambda}$ as a consequence of Theorems 3.3 and 3.4. .
+we select the constant step-size $\alpha= \frac{1}{L} = \frac{1}{\sigma_{\max}(X)^2 + \lambda}$ as a consequence of Theorems 3.3 and 3.4.
+%
+Moreover, since $f_\lambda$ is $\lambda$-strongly convex, we know by Theorem 4.31 and Corollary 4.32 that $f_\lambda(\theta_k)$ (respectively $\|\nabla f_{\lambda}(\theta_k)\|$) converges at least linearily to the unique global minimum $f_{\lambda}(\theta^\ast)$ (respectively $0$).
 
-{\textbf{TODO : USE THEOREM 4.31 INSTEAD AS IT HAS A CRITERION FOR CONVERGENCE LINEARILY!}}
+%{\textbf{TODO : USE THEOREM 4.31 INSTEAD AS IT HAS A CRITERION FOR CONVERGENCE LINEARILY!}}
 
-\textbf{TODO : CHANGE THE README EXPLANATION !!}
+%\textbf{TODO : CHANGE THE README EXPLANATION !!}
+
+
 \section*{Question 5}
 
 \begin{center}
